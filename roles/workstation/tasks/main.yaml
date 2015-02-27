@@ -1,0 +1,7 @@
+---
+- name: Install required software
+  homebrew: name={{ item }} state=present
+  with_items:
+  - git
+  - vim
+
