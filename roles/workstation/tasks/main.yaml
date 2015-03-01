@@ -1,7 +1,38 @@
 ---
-- name: Install required software
+- name: Install homebrew
+  shell: ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  register: command_result
+  failed_when: "'It appears Homebrew is already installed' not in command_result.stderr"
+
+- name: Install Apple command line tools
+  shell: xcode-select --install
+  register: command_result
+  failed_when: "'command line tools are already installed' not in command_result.stderr"
+
+- name: Tap some kegs
+  homebrew_tap: tap=caskroom/cask state=present
+
+- name: Install homebrew software
   homebrew: name={{ item }} state=present
   with_items:
   - git
   - vim
+  - zsh
+  - brew-cask
 
+- name: Install appliations
+  homebrew_cask: name={{item}} state=present
+  with_items:
+  - sublime-text
+  - iterm2
+  - divvy
+  - vagrant
+  - virtualbox
+  - macvim
+  # - intellij-idea
+
+- name: Create directories
+  shell: mkdir -p ~/bin
+
+- name: Create sublime shortcut
+  file: src="/opt/homebrew-cask/Caskroom/sublime-text/2.0.2/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl" dest=~/bin/subl state=link force=yes
