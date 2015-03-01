@@ -36,3 +36,9 @@
 
 - name: Create sublime shortcut
   file: src="/opt/homebrew-cask/Caskroom/sublime-text/2.0.2/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl" dest=~/bin/subl state=link force=yes
+
+- name: Download Inconsolata font
+  get_url: url=http://www.levien.com/type/myfonts/Inconsolata.otf dest=/tmp
+
+- name: Open font install window
+  shell: open /tmp/Inconsolata.otf
